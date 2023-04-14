@@ -21,6 +21,8 @@ const int sensorTemperatura;
 //-*****Polea*****-
 const int stepsPerRevolution = 2038;
 Stepper myStepper = Stepper(stepsPerRevolution, 38, 40, 39, 41);
+const int vueltas = 0;//Cuantas vueltas necesita???
+bool abierto;
 //***********************
 
 // Declarar objetos
@@ -70,13 +72,17 @@ void loop() {
   if (sensorTemperatura > 34) {
     Servomotor.write(90); // Activar servo
     digitalWrite (ventilador,HIGH);
-    myStepper.setSpeed(5);
-	  myStepper.step(stepsPerRevolution);
+    myStepper.setSpeed(vueltas);
+    myStepper.step(stepsPerRevolution);
+    abierto = true;
     lcd.setCursor(11,1);
     lcd.print("Open ");
   } else {
     myservo.write(0); // Desactivar servo
     digitalWrite (ventilador, LOW);
+    myStepper.setSpeed(vueltas);
+    myStepper.step(-stepsPerRevolution);
+    abierto = false;
     lcd.setCursor(11,1);
     lcd.print("Close");
   }
